@@ -1,17 +1,15 @@
+import 'reflect-metadata'
+import 'dotenv/config'
 import express from 'express'
+
+import './database/connection'
+import { router } from './routes'
 
 const app = express()
 app.use(express.json())
+app.use(router)
 
-app.get('/users', (req, res) => {
-  res.json({ message: 'Hello World' })
-})
-
-app.post('/post', (request, response) => {
-  response.json({ data: request.body })
-})
-
-const port = 9899
+const port = process.env.PORT
 app.listen(port, () =>
   console.log(`Server running at http://localhost:${port}`)
 )
