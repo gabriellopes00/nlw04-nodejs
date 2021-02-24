@@ -8,6 +8,8 @@ const surveysController = new SurveysController()
 const router = Router()
 
 router.post('/users', usersController.create)
+
 router.post('/surveys', surveysController.create)
+router.get('/surveys', surveysController.listAll)
 
 export { router }
