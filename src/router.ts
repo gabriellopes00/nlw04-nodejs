@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { SurveysController } from './controllers/surveys-controller'
-import { UsersController } from './controllers/users'
+import { UsersController } from './controllers/users-controller'
 
 const usersController = new UsersController()
 const surveysController = new SurveysController()

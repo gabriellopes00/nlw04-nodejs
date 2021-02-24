@@ -16,6 +16,6 @@ export class SurveysController {
   async listAll(req: Request, res: Response): Promise<Response> {
     const surveysRepository = getCustomRepository(SurveysRepository)
     const surveys = await surveysRepository.find()
-    return res.json(surveys)
+    return res.json({ surveys })
   }
 }
