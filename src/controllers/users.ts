@@ -15,6 +15,6 @@ export class UsersController {
     const user = usersRepository.create({ name, email })
     await usersRepository.save(user)
 
-    return res.sendStatus(200)
+    return res.status(201).json({ user })
   }
 }
