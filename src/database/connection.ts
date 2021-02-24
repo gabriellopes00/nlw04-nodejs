@@ -1,3 +1,10 @@
-import { createConnection } from 'typeorm'
+import { Connection, createConnection, getConnectionOptions } from 'typeorm'
 
-createConnection().then(() => console.log('PostgreSQL connected successfully'))
+export default async (): Promise<Connection> => {
+  const defaultOptions = await getConnectionOptions()
+  return createConnection(
+    Object.assign(defaultOptions, {
+      database: process.env.ENV === 'test' ? 'nlwtest' : defaultOptions.database
+    })
+  )
+}
