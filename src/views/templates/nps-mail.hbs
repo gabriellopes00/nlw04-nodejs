@@ -1,0 +1,67 @@
+<style>
+  .container {
+    width: 880px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+
+  }
+
+  .value{
+    padding: 10px;
+    background-color: #8257e6;
+    color: white;
+    border-radius: 5px;
+    width: 15px;
+    text-align: center;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+
+  .level{
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+    width: 350px;
+  }
+
+  .answers {
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+<div class="container">
+  <label>Hello, {{name}} ! Are you ok ?</label>
+  <h3>{{title}}</h3>
+  <br />
+
+  <strong>{{description}}</strong>
+  <br />
+  <br />
+
+  <div class="level">
+    <span>Less probability</span>
+    <span>High probability</span>
+  </div>
+
+  <div class="answers">
+    <a class="value" href="">1</a>
+    <a class="value" href="">2</a>
+    <a class="value" href="">3</a>
+    <a class="value" href="">4</a>
+    <a class="value" href="">5</a>
+    <a class="value" href="">6</a>
+    <a class="value" href="">7</a>
+    <a class="value" href="">8</a>
+    <a class="value" href="">9</a>
+    <a class="value" href="">10</a>
+
+  </div>
+
+  <strong>Your opinion is very important to us.</strong>
+  <h3>Gabriel Lopes | nlw#04</h3>
+</div>
