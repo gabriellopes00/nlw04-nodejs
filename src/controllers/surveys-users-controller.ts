@@ -23,7 +23,8 @@ export class SendMailController {
       return res.status(400).json({ message: 'Survey not exists' })
 
     const existentSurveysUsers = await surveysUsersRepository.findOne({
-      where: [{ user_id: existentUser.id }, { value: null }]
+      where: [{ user_id: existentUser.id }, { value: null }],
+      relations: ['users', 'surveys']
     })
     const mailVariables = {
       name: existentUser.name,
