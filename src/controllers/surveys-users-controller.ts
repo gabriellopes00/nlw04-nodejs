@@ -3,6 +3,7 @@ import { UsersRepository } from '../database/repositories/users'
 import { getCustomRepository } from 'typeorm'
 import { Request, Response } from 'express'
 import { SurveysUsersRepository } from '../database/repositories/surveys-users'
+import mailService from '../services/mail-service'
 
 export class SendMailController {
   async handle(req: Request, res: Response): Promise<Response> {
@@ -25,6 +26,8 @@ export class SendMailController {
       survey_id: surveyId
     })
     await surveysUsersRepository.save(surveysUser)
+
+    mailService.send(email, existentSurvey.title, existentSurvey.description)
 
     return res.json({ surveysUser })
   }
