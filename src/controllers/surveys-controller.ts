@@ -1,6 +1,6 @@
-import { SurveysRepository } from '../database/repositories/surveys'
 import { Request, Response } from 'express'
 import { getCustomRepository } from 'typeorm'
+import { SurveysRepository } from '../database/repositories/surveys'
 
 export class SurveysController {
   async create(req: Request, res: Response): Promise<Response> {

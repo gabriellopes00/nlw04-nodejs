@@ -1,9 +1,9 @@
 import {
   Connection,
+  ConnectionManager,
   ConnectionOptions,
   createConnection,
   getConnectionOptions,
-  ConnectionManager,
   getCustomRepository,
   ObjectType
 } from 'typeorm'

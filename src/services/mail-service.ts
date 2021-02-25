@@ -1,7 +1,6 @@
-import nodemailer, { Transporter } from 'nodemailer'
-import { resolve } from 'path'
 import fs from 'fs'
 import handlebars from 'handlebars'
+import nodemailer, { Transporter } from 'nodemailer'
 
 class MailService {
   private client: Transporter
@@ -34,8 +33,8 @@ class MailService {
       from: 'NPS <noreplay@nps.com.br>'
     })
 
-    console.log('Message sent: %s', message.messageId)
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message))
+    console.log('Email sent:', message.messageId)
+    console.log('Preview URL:', nodemailer.getTestMessageUrl(message))
   }
 }
 

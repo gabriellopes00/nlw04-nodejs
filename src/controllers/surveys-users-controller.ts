@@ -1,10 +1,10 @@
-import { SurveysRepository } from '../database/repositories/surveys'
-import { UsersRepository } from '../database/repositories/users'
-import { getCustomRepository } from 'typeorm'
 import { Request, Response } from 'express'
-import { SurveysUsersRepository } from '../database/repositories/surveys-users'
-import mailService from '../services/mail-service'
 import { resolve } from 'path'
+import { getCustomRepository } from 'typeorm'
+import { SurveysRepository } from '../database/repositories/surveys'
+import { SurveysUsersRepository } from '../database/repositories/surveys-users'
+import { UsersRepository } from '../database/repositories/users'
+import mailService from '../services/mail-service'
 
 export class SendMailController {
   async handle(req: Request, res: Response): Promise<Response> {
@@ -26,6 +26,7 @@ export class SendMailController {
       where: [{ user_id: existentUser.id }, { value: null }],
       relations: ['users', 'surveys']
     })
+
     const mailVariables = {
       name: existentUser.name,
       title: existentSurvey.title,
@@ -33,15 +34,11 @@ export class SendMailController {
       link: process.env.MAIL_URL,
       user_id: existentUser.id
     }
-    const templatePath = resolve(
-      __dirname,
-      '..',
-      'views',
-      'templates',
-      'nps-mail.hbs'
-    )
-    if (existentSurveysUsers)
-      mailService.send(email, existentSurvey.title, mailVariables, templatePath)
+
+    const path = resolve(__dirname, '..', 'views', 'templates', 'nps-mail.hbs')
+    if (existentSurveysUsers) {
+      mailService.send(email, existentSurvey.title, mailVariables, path)
+    }
 
     const surveysUser = surveysUsersRepository.create({
       user_id: existentUser.id,
@@ -49,13 +46,7 @@ export class SendMailController {
     })
     await surveysUsersRepository.save(surveysUser)
 
-    mailService.send(
-      email,
-      existentSurvey.title,
-      mailVariables,
-      resolve(__dirname, '..', 'views', 'templates', 'nps-mail.hbs')
-    )
-
+    mailService.send(email, existentSurvey.title, mailVariables, path)
     return res.json({ existentSurveysUsers })
   }
 }
