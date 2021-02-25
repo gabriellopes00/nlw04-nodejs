@@ -1,10 +1,43 @@
-import { Connection, createConnection, getConnectionOptions } from 'typeorm'
+import {
+  Connection,
+  ConnectionOptions,
+  createConnection,
+  getConnectionOptions,
+  ConnectionManager,
+  getCustomRepository,
+  ObjectType
+} from 'typeorm'
 
-export default async (): Promise<Connection> => {
-  const defaultOptions = await getConnectionOptions()
-  return createConnection(
-    Object.assign(defaultOptions, {
-      database: process.env.ENV === 'test' ? 'nlwtest' : defaultOptions.database
-    })
-  )
+export class PsQLConnectionManager extends ConnectionManager {
+  public connection: Connection = null
+  public options: ConnectionOptions = null
+
+  constructor(conOptions?: ConnectionOptions) {
+    super()
+    this.options = conOptions
+  }
+
+  async connect(): Promise<Connection> {
+    this.options = await this.getOptions()
+    this.connection = await createConnection(
+      Object.assign(this.options, {
+        database: process.env.ENV === 'test' ? 'nlwtest' : this.options.database
+      })
+    )
+    return this.connection
+  }
+
+  async close(): Promise<void> {
+    await this.connection.close()
+  }
+
+  private async getOptions(): Promise<ConnectionOptions> {
+    this.options = await getConnectionOptions()
+    return this.options
+  }
+
+  public getCustomRepository<T>(repository: ObjectType<T>): T {
+    const customRepository = getCustomRepository(repository)
+    return customRepository
+  }
 }
