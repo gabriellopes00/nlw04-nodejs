@@ -22,25 +22,39 @@ export class SendMailController {
     if (!existentSurvey)
       return res.status(400).json({ message: 'Survey not exists' })
 
+    const existentSurveysUsers = await surveysUsersRepository.findOne({
+      where: [{ user_id: existentUser.id }, { value: null }]
+    })
+    const mailVariables = {
+      name: existentUser.name,
+      title: existentSurvey.title,
+      description: existentSurvey.description,
+      link: process.env.MAIL_URL,
+      user_id: existentUser.id
+    }
+    const templatePath = resolve(
+      __dirname,
+      '..',
+      'views',
+      'templates',
+      'nps-mail.hbs'
+    )
+    if (existentSurveysUsers)
+      mailService.send(email, existentSurvey.title, mailVariables, templatePath)
+
     const surveysUser = surveysUsersRepository.create({
       user_id: existentUser.id,
       survey_id: surveyId
     })
     await surveysUsersRepository.save(surveysUser)
 
-    const variables = {
-      name: existentUser.name,
-      title: existentSurvey.title,
-      description: existentSurvey.description
-    }
-
     mailService.send(
       email,
       existentSurvey.title,
-      variables,
+      mailVariables,
       resolve(__dirname, '..', 'views', 'templates', 'nps-mail.hbs')
     )
 
-    return res.json({ surveysUser })
+    return res.json({ existentSurveysUsers })
   }
 }
