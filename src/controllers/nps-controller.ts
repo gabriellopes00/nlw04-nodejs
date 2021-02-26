@@ -24,8 +24,15 @@ export class NpsController {
     const nps = Number(
       (((promoters - detractors) / totalAnswers) * 100).toFixed(2)
     )
+
+    // https://resultadosdigitais.com.br/blog/o-que-e-nps/ => table font
+    let level = ''
+    if (nps >= 75) level = 'great'
+    else if (nps >= 50) level = 'good'
+    else if (nps >= 0) level = 'almost good'
+    else if (nps >= -100) level = 'bad'
     return res.json({
-      nps: { detractors, promoters, passives, totalAnswers, nps }
+      nps: { detractors, promoters, passives, totalAnswers, level, nps }
     })
   }
 }

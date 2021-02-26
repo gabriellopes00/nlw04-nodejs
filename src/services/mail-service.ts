@@ -33,8 +33,8 @@ class MailService {
       from: 'NPS <noreplay@nps.com.br>'
     })
 
-    console.log('Email sent:', message.messageId)
-    console.log('Preview URL:', nodemailer.getTestMessageUrl(message))
+    console.log('Email sent::', message.messageId)
+    console.log('Preview URL::', nodemailer.getTestMessageUrl(message))
   }
 }
 

@@ -6,10 +6,19 @@ import { SurveysRepository } from '../database/repositories/surveys'
 import { SurveysUsersRepository } from '../database/repositories/surveys-users'
 import { UsersRepository } from '../database/repositories/users'
 import mailService from '../services/mail-service'
+import * as yup from 'yup'
 
 export class SendMailController {
   async handle(req: Request, res: Response): Promise<Response> {
     const { email, surveyId } = req.body
+    const isValidData = await yup
+      .object()
+      .shape({
+        surveyId: yup.string().required(),
+        email: yup.string().required().email()
+      })
+      .isValid(req.body)
+    if (!isValidData) throw new HttpErrors('Validation failed', 400)
 
     const usersRepository = getCustomRepository(UsersRepository)
     const surveysRepository = getCustomRepository(SurveysRepository)
