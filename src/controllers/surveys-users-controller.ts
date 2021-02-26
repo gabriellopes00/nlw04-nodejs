@@ -1,3 +1,4 @@
+import { HttpErrors } from '../errors/http-errors'
 import { Request, Response } from 'express'
 import { resolve } from 'path'
 import { getCustomRepository } from 'typeorm'
@@ -15,12 +16,10 @@ export class SendMailController {
     const surveysUsersRepository = getCustomRepository(SurveysUsersRepository)
 
     const existentUser = await usersRepository.findOne({ email })
-    if (!existentUser)
-      return res.status(401).json({ message: 'User not found' })
+    if (!existentUser) throw new HttpErrors('User not found', 401)
 
     const existentSurvey = await surveysRepository.findOne({ id: surveyId })
-    if (!existentSurvey)
-      return res.status(400).json({ message: 'Survey not exists' })
+    if (!existentSurvey) throw new HttpErrors('Survey not exists', 400)
 
     const existentSurveysUsers = await surveysUsersRepository.findOne({
       where: { user_id: existentUser.id, value: null },

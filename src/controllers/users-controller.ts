@@ -1,3 +1,4 @@
+import { HttpErrors } from '../errors/http-errors'
 import { Request, Response } from 'express'
 import { getCustomRepository } from 'typeorm'
 import * as yup from 'yup'
@@ -16,12 +17,11 @@ export class UsersController {
       })
       .isValid(req.body)
 
-    if (!isValidData)
-      return res.status(400).json({ error: 'Validation failed' })
+    if (!isValidData) throw new HttpErrors('Validation failed', 400)
 
     const userAlreadyExists = await usersRepository.findOne({ email })
     if (userAlreadyExists) {
-      return res.status(409).json({ message: 'Received email already in use' })
+      throw new HttpErrors('Received email already in use', 409)
     }
 
     const user = usersRepository.create({ name, email })
