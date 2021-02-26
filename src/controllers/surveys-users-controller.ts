@@ -23,7 +23,7 @@ export class SendMailController {
       return res.status(400).json({ message: 'Survey not exists' })
 
     const existentSurveysUsers = await surveysUsersRepository.findOne({
-      where: [{ user_id: existentUser.id }, { value: null }],
+      where: { user_id: existentUser.id, value: null },
       relations: ['users', 'surveys']
     })
 
@@ -32,11 +32,12 @@ export class SendMailController {
       title: existentSurvey.title,
       description: existentSurvey.description,
       link: process.env.MAIL_URL,
-      user_id: existentUser.id
+      id: ''
     }
 
     const path = resolve(__dirname, '..', 'views', 'templates', 'nps-mail.hbs')
     if (existentSurveysUsers) {
+      mailVariables.id = existentSurveysUsers.id
       mailService.send(email, existentSurvey.title, mailVariables, path)
     }
 
@@ -46,6 +47,7 @@ export class SendMailController {
     })
     await surveysUsersRepository.save(surveysUser)
 
+    mailVariables.id = surveysUser.id
     mailService.send(email, existentSurvey.title, mailVariables, path)
     return res.json({ existentSurveysUsers })
   }
