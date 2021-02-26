@@ -39,6 +39,7 @@ export class SendMailController {
     if (existentSurveysUsers) {
       mailVariables.id = existentSurveysUsers.id
       mailService.send(email, existentSurvey.title, mailVariables, path)
+      return res.json(existentSurvey)
     }
 
     const surveysUser = surveysUsersRepository.create({
